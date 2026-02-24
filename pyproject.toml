@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "humanregex"
+version = "0.1.0"
+description = "Write regex using plain English keywords — no more memorizing syntax."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.8"
+authors = [
+    { name = "Your Name", email = "you@example.com" }
+]
+keywords = ["regex", "regular expressions", "human-friendly", "pattern matching"]
+classifiers = [
+    "Development Status :: 1 - Planning",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Text Processing",
+    "Topic :: Utilities",
+]
+
+# Zero third-party dependencies — only Python's built-in `re`
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0", "pytest-cov"]
+
+[project.urls]
+Homepage   = "https://github.com/YOUR_USERNAME/humanregex"
+Repository = "https://github.com/YOUR_USERNAME/humanregex"
+Issues     = "https://github.com/YOUR_USERNAME/humanregex/issues"
+Changelog  = "https://github.com/YOUR_USERNAME/humanregex/blob/main/CHANGELOG.md"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -125,7 +125,6 @@ pytest
 - `v0.4.0` — Lookaheads and lookbehinds
 - `v1.0.0` — Stable public API
 
-## Contributing
 
 Pull requests are welcome! Please open an issue first to discuss what you'd like to change.
 

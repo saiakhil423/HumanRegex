@@ -49,7 +49,7 @@ cd humanregex
 pip install -e ".[dev]"
 ```
 
-## API — v0.1.0
+## API — v0.1.1
 
 ### Anchors
 | Method | Regex | Description |

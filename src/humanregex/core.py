@@ -160,6 +160,42 @@ class Pattern:
         self._pattern += f"[^{re.escape(chars)}]"
         return self
 
+    def group(self, pattern: str) -> "Pattern":
+        """Match a capturing group from a raw regex *pattern*."""
+        self._pattern += f"({pattern})"
+        return self
+
+    def named_group(self, name: str, pattern: str) -> "Pattern":
+        """Match a named capturing group from a raw regex *pattern*."""
+        self._pattern += f"(?P<{name}>{pattern})"
+        return self
+
+    # ------------------------------------------------------------------
+    # Pre-built patterns
+    # ------------------------------------------------------------------
+
+    def word_boundary(self) -> "Pattern":
+        """Match a word boundary (\b)."""
+        self._pattern += r"\b"
+        return self
+
+    def email(self) -> "Pattern":
+        """Match a practical email pattern (not full RFC validation)."""
+        self._pattern += r"[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}"
+        return self
+
+    def url(self, require_scheme: bool = True) -> "Pattern":
+        """Match an http/https URL with optional scheme requirement."""
+        scheme = r"https?://" if require_scheme else r"(?:https?://)?"
+        self._pattern += scheme + r"[A-Za-z0-9.-]+(?:/[\w\-./?%&=+#]*)?"
+        return self
+
+    def ip_address(self) -> "Pattern":
+        """Match an IPv4 address in dotted decimal notation."""
+        octet = r"(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)"
+        self._pattern += rf"(?:{octet}\.){{3}}{octet}"
+        return self
+
     # ------------------------------------------------------------------
     # Flags
     # ------------------------------------------------------------------
@@ -189,6 +225,14 @@ class Pattern:
     def find_all(self, text: str) -> list:
         """Return a list of every non-overlapping match in *text*."""
         return re.findall(self._pattern, text, self._flags)
+
+    def find_iter(self, text: str):
+        """Return an iterator over non-overlapping Match objects in *text*."""
+        return re.finditer(self._pattern, text, self._flags)
+
+    def count(self, text: str) -> int:
+        """Return how many non-overlapping matches are found in *text*."""
+        return len(self.find_all(text))
 
     def replace(self, text: str, replacement: str) -> str:
         """Replace every match in *text* with *replacement*."""

@@ -137,6 +137,50 @@ class TestGrouping:
         assert p.match("a") is True
         assert p.match("5") is False
 
+    def test_group(self):
+        p = Pattern().starts_with().group(r"cat|dog").ends_with()
+        assert p.match("cat") is True
+        assert p.match("dog") is True
+        assert p.match("bird") is False
+
+    def test_named_group(self):
+        p = Pattern().starts_with().named_group("code", r"\d{3}").ends_with()
+        result = p.search("123")
+        assert result is not None
+        assert result.group("code") == "123"
+
+
+
+
+# ── Pre-built patterns ─────────────────────────────────────────────────────
+
+class TestPrebuiltPatterns:
+    def test_word_boundary(self):
+        p = Pattern().word_boundary().literal("cat").word_boundary()
+        assert p.search("a cat nap") is not None
+        assert p.search("concatenate") is None
+
+    def test_email(self):
+        p = Pattern().starts_with().email().ends_with()
+        assert p.match("hello.world+news@example.co") is True
+        assert p.match("not-an-email") is False
+
+    def test_url_requires_scheme_by_default(self):
+        p = Pattern().starts_with().url().ends_with()
+        assert p.match("https://example.com/path") is True
+        assert p.match("example.com/path") is False
+
+    def test_url_optional_scheme(self):
+        p = Pattern().starts_with().url(require_scheme=False).ends_with()
+        assert p.match("https://example.com") is True
+        assert p.match("example.com/docs") is True
+
+    def test_ip_address(self):
+        p = Pattern().starts_with().ip_address().ends_with()
+        assert p.match("192.168.0.1") is True
+        assert p.match("255.255.255.255") is True
+        assert p.match("256.1.2.3") is False
+        assert p.match("999.999.999.999") is False
 
 # ── Flags ──────────────────────────────────────────────────────────────────
 
@@ -168,6 +212,14 @@ class TestActions:
     def test_find_all(self):
         result = Pattern().digit().one_or_more().find_all("Call 123 or 4567 today")
         assert result == ["123", "4567"]
+
+    def test_find_iter(self):
+        iterator = Pattern().digit().one_or_more().find_iter("Call 123 or 4567 today")
+        assert [m.group() for m in iterator] == ["123", "4567"]
+
+    def test_count(self):
+        result = Pattern().digit().one_or_more().count("Call 123 or 4567 today")
+        assert result == 2
 
     def test_replace(self):
         result = Pattern().digit().one_or_more().replace("Hello 2024 World 42", "NUM")

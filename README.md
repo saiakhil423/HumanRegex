@@ -88,6 +88,16 @@ pip install -e ".[dev]"
 | `.one_of("a", "b", "c")` | Match one of the given strings |
 | `.one_of_chars("aeiou")` | Match one character from the set |
 | `.not_chars("0-9")` | Match any character NOT in the set |
+| `.group(pattern)` | Add a capturing group from raw regex text |
+| `.named_group(name, pattern)` | Add a named capturing group from raw regex text |
+
+### Pre-built Patterns
+| Method | Description |
+|---|---|
+| `.word_boundary()` | Add a word boundary (`\b`) |
+| `.email()` | Match a practical email pattern |
+| `.url(require_scheme=True)` | Match an `http`/`https` URL |
+| `.ip_address()` | Match an IPv4 address |
 
 ### Flags
 | Method | Description |
@@ -101,6 +111,8 @@ pip install -e ".[dev]"
 | `.match(text)` | `bool` | Full string must match |
 | `.search(text)` | `Match \| None` | Find anywhere in string |
 | `.find_all(text)` | `list` | All non-overlapping matches |
+| `.find_iter(text)` | `iterator` | Iterate over match objects |
+| `.count(text)` | `int` | Count non-overlapping matches |
 | `.replace(text, repl)` | `str` | Replace all matches |
 | `.split(text)` | `list` | Split string by pattern |
 | `.compile()` | `re.Pattern` | Compiled regex for reuse |
@@ -120,8 +132,8 @@ pytest
 
 ## Roadmap
 
-- `v0.2.0` — Pre-built patterns (`email()`, `url()`, `ip_address()`, …)
-- `v0.3.0` — Groups and capture (`group()`, `named_group()`)
+- `v0.2.0` — Pre-built patterns (`phone_number()`, `credit_card()`, …)
+- `v0.3.0` — Advanced grouping and capture helpers
 - `v0.4.0` — Lookaheads and lookbehinds
 - `v1.0.0` — Stable public API
 

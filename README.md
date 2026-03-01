@@ -2,13 +2,14 @@
 
 > Write regex using plain English — no more memorizing cryptic syntax.
 
-[![PyPI version](https://img.shields.io/pypi/v/humanregex)](https://pypi.org/project/humanregex/)
-[![Python](https://img.shields.io/pypi/pyversions/humanregex)](https://pypi.org/project/humanregex/)
+[![PyPI version](https://img.shields.io/pypi/v/human-regex-lib)](https://pypi.org/project/human-regex-lib/)
+[![Python](https://img.shields.io/pypi/pyversions/human-regex-lib)](https://pypi.org/project/human-regex-lib/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ## Quick start
 
-```python
+```
+python
 from humanregex import Pattern
 
 # Match a 7-digit phone number
@@ -34,13 +35,15 @@ Pattern().digit().one_or_more().replace("Ref 2024-42", "NUM")  # 'Ref NUM-NUM'
 
 ## Installation
 
-```bash
-pip install humanregex
+```
+bash
+pip install human-regex-lib
 ```
 
 Or install from source for local development:
 
-```bash
+```
+bash
 git clone https://github.com/YOUR_USERNAME/humanregex
 cd humanregex
 pip install -e ".[dev]"
@@ -122,7 +125,7 @@ pip install -e ".[dev]"
 | Method | Returns | Description |
 |---|---|---|
 | `.match(text)` | `bool` | Full string must match |
-| `.search(text)` | `Match \| None` | Find anywhere in string |
+| `.search(text)` | `Match | None` | Find anywhere in string |
 | `.find_all(text)` | `list` | All non-overlapping matches |
 | `.find_iter(text)` | `iterator` | Iterate over match objects |
 | `.count(text)` | `int` | Count non-overlapping matches |
@@ -138,7 +141,8 @@ pip install -e ".[dev]"
 
 ## Running tests
 
-```bash
+```
+bash
 pip install -e ".[dev]"
 pytest
 ```

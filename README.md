@@ -49,7 +49,7 @@ cd humanregex
 pip install -e ".[dev]"
 ```
 
-## API — v0.1.1
+## API — v0.2.0
 
 ### Anchors
 | Method | Regex | Description |
@@ -84,6 +84,7 @@ pip install -e ".[dev]"
 | `.one_or_more()` | `+` | One or more of previous |
 | `.zero_or_more()` | `*` | Zero or more of previous |
 | `.optional()` | `?` | Previous token is optional |
+| `.times(min, max=None)` | `{min,max}` | Repeat previous token a custom number of times |
 
 ### Grouping & Alternation
 | Method | Description |
@@ -93,6 +94,16 @@ pip install -e ".[dev]"
 | `.not_chars("0-9")` | Match any character NOT in the set |
 | `.group(pattern)` | Add a capturing group from raw regex text |
 | `.named_group(name, pattern)` | Add a named capturing group from raw regex text |
+| `.either(*patterns)` | Alternation with raw regex snippets or `Pattern` objects |
+| `.raw(pattern)` | Append raw regex text directly |
+
+### Lookarounds
+| Method | Description |
+|---|---|
+| `.lookahead(pattern)` | Assert a pattern appears immediately ahead |
+| `.negative_lookahead(pattern)` | Assert a pattern does not appear immediately ahead |
+| `.lookbehind(pattern)` | Assert a pattern appears immediately behind |
+| `.negative_lookbehind(pattern)` | Assert a pattern does not appear immediately behind |
 
 ### Pre-built Patterns
 | Method | Description |
@@ -101,6 +112,8 @@ pip install -e ".[dev]"
 | `.email()` | Match a practical email pattern |
 | `.url(require_scheme=True)` | Match an `http`/`https` URL |
 | `.ip_address()` | Match an IPv4 address |
+| `.phone_number()` | Match practical North American phone formats |
+| `.hex_color()` | Match `#RGB` and `#RRGGBB` hex colors |
 
 ### Flags
 | Method | Description |
@@ -134,11 +147,26 @@ pip install -e ".[dev]"
 pytest
 ```
 
+## Feature ideas to make this project more "featuristic"
+
+- Add ergonomic lookaround helpers for validation without consuming characters.
+- Add richer prebuilt patterns for common real-world data (phone numbers, hex colors, IDs, etc.).
+- Add an escape-hatch API for advanced users (`raw`) while keeping fluent chain readability.
+- Add a generic custom quantifier (`times`) instead of relying only on `+`, `*`, and `?`.
+- Improve alternation ergonomics so full `Pattern` blocks can be combined with `either`.
+
+### Implemented in this update
+
+- ✅ `times(min, max=None)`
+- ✅ `raw(pattern)`
+- ✅ `either(*patterns)` with support for both strings and `Pattern` objects
+- ✅ Lookarounds: `lookahead`, `negative_lookahead`, `lookbehind`, `negative_lookbehind`
+- ✅ Prebuilt helpers: `phone_number()` and `hex_color()`
+
 ## Roadmap
 
-- `v0.2.0` — Pre-built patterns (`phone_number()`, `credit_card()`, …)
-- `v0.3.0` — Advanced grouping and capture helpers
-- `v0.4.0` — Lookaheads and lookbehinds
+- `v0.3.0` — Additional pre-built patterns (`credit_card()`, `postal_code()`, …)
+- `v0.4.0` — Richer group composition helpers
 - `v1.0.0` — Stable public API
 
 

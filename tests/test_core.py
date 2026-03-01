@@ -117,6 +117,12 @@ class TestQuantifiers:
         p = Pattern().starts_with().literal("colour").optional().ends_with()
         assert p.search("colour") is not None
 
+    def test_times(self):
+        p = Pattern().starts_with().group("ha").times(2, 3).ends_with()
+        assert p.match("haha") is True
+        assert p.match("hahaha") is True
+        assert p.match("ha") is False
+
 
 # ── Grouping & alternation ─────────────────────────────────────────────────
 
@@ -148,6 +154,47 @@ class TestGrouping:
         result = p.search("123")
         assert result is not None
         assert result.group("code") == "123"
+
+    def test_either_with_raw_patterns(self):
+        p = Pattern().starts_with().either(r"\d{4}", r"[A-Z]{2}").ends_with()
+        assert p.match("2024") is True
+        assert p.match("AB") is True
+        assert p.match("A2") is False
+
+    def test_either_accepts_pattern_objects(self):
+        digits = Pattern().digit(3)
+        letters = Pattern().letter(3)
+        p = Pattern().starts_with().either(digits, letters).ends_with()
+        assert p.match("123") is True
+        assert p.match("abc") is True
+        assert p.match("ab1") is False
+
+    def test_raw(self):
+        p = Pattern().starts_with().raw(r"ID\-[0-9]{4}").ends_with()
+        assert p.match("ID-2024") is True
+        assert p.match("ID-ABCD") is False
+
+
+class TestLookarounds:
+    def test_lookahead(self):
+        p = Pattern().digit().lookahead(r"USD")
+        assert p.search("5USD") is not None
+        assert p.search("5EUR") is None
+
+    def test_negative_lookahead(self):
+        p = Pattern().digit().negative_lookahead(r"USD")
+        assert p.search("5EUR") is not None
+        assert p.search("5USD") is None
+
+    def test_lookbehind(self):
+        p = Pattern().lookbehind(r"USD").digit()
+        assert p.search("USD5") is not None
+        assert p.search("EUR5") is None
+
+    def test_negative_lookbehind(self):
+        p = Pattern().negative_lookbehind(r"USD").digit()
+        assert p.search("EUR5") is not None
+        assert p.search("USD5") is None
 
 
 
@@ -181,6 +228,19 @@ class TestPrebuiltPatterns:
         assert p.match("255.255.255.255") is True
         assert p.match("256.1.2.3") is False
         assert p.match("999.999.999.999") is False
+
+    def test_phone_number(self):
+        p = Pattern().starts_with().phone_number().ends_with()
+        assert p.match("555-123-4567") is True
+        assert p.match("(555) 123-4567") is True
+        assert p.match("+1 555 123 4567") is True
+        assert p.match("555123456") is False
+
+    def test_hex_color(self):
+        p = Pattern().starts_with().hex_color().ends_with()
+        assert p.match("#fff") is True
+        assert p.match("#A1B2C3") is True
+        assert p.match("fff") is False
 
 # ── Flags ──────────────────────────────────────────────────────────────────
 

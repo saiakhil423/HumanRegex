@@ -140,6 +140,11 @@ class Pattern:
         self._pattern += "?"
         return self
 
+    def times(self, min_count: int, max_count: int = None) -> "Pattern":
+        """Repeat the previous token between *min_count* and *max_count* times."""
+        self._pattern += self._between(min_count, max_count)
+        return self
+
     # ------------------------------------------------------------------
     # Grouping & alternation
     # ------------------------------------------------------------------
@@ -170,6 +175,42 @@ class Pattern:
         self._pattern += f"(?P<{name}>{pattern})"
         return self
 
+    def either(self, *patterns) -> "Pattern":
+        """Match one of multiple raw regex snippets or Pattern objects."""
+        options = []
+        for pattern in patterns:
+            if isinstance(pattern, Pattern):
+                options.append(pattern.build())
+            else:
+                options.append(str(pattern))
+        self._pattern += "(?:" + "|".join(options) + ")"
+        return self
+
+    def raw(self, pattern: str) -> "Pattern":
+        """Append raw regex text directly (advanced escape hatch)."""
+        self._pattern += pattern
+        return self
+
+    def lookahead(self, pattern: str) -> "Pattern":
+        """Assert that *pattern* appears immediately ahead."""
+        self._pattern += f"(?={pattern})"
+        return self
+
+    def negative_lookahead(self, pattern: str) -> "Pattern":
+        """Assert that *pattern* does not appear immediately ahead."""
+        self._pattern += f"(?!{pattern})"
+        return self
+
+    def lookbehind(self, pattern: str) -> "Pattern":
+        """Assert that *pattern* appears immediately behind."""
+        self._pattern += f"(?<={pattern})"
+        return self
+
+    def negative_lookbehind(self, pattern: str) -> "Pattern":
+        """Assert that *pattern* does not appear immediately behind."""
+        self._pattern += f"(?<!{pattern})"
+        return self
+
     # ------------------------------------------------------------------
     # Pre-built patterns
     # ------------------------------------------------------------------
@@ -194,6 +235,16 @@ class Pattern:
         """Match an IPv4 address in dotted decimal notation."""
         octet = r"(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)"
         self._pattern += rf"(?:{octet}\.){{3}}{octet}"
+        return self
+
+    def phone_number(self) -> "Pattern":
+        """Match practical North American phone numbers, with optional country code."""
+        self._pattern += r"(?:\+1[-.\s]?)?(?:\(?\d{3}\)?[-.\s]?)\d{3}[-.\s]?\d{4}"
+        return self
+
+    def hex_color(self) -> "Pattern":
+        """Match CSS-style hex colors like #fff or #ff8800."""
+        self._pattern += r"#(?:[A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})"
         return self
 
     # ------------------------------------------------------------------

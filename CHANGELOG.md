@@ -9,6 +9,10 @@ This project uses [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+---
+
+## [0.1.1] - 2026-02-25
+
 ### Added
 - Pre-built pattern helpers: `word_boundary()`, `email()`, `url(require_scheme=True)`, and `ip_address()`
 - Group capture helpers: `group(pattern)` and `named_group(name, pattern)`

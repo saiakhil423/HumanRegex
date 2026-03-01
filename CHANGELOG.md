@@ -10,10 +10,11 @@ This project uses [Semantic Versioning](https://semver.org/).
 ## [Unreleased]
 
 ### Added
-- Pre-built pattern helpers: `word_boundary()`, `email()`, `url(require_scheme=True)`, and `ip_address()`
-- Group capture helpers: `group(pattern)` and `named_group(name, pattern)`
-- New actions: `find_iter(text)` and `count(text)`
-- Tests covering all new helper methods
+- Custom quantifier helper: `times(min_count, max_count=None)`
+- Alternation and escape-hatch helpers: `either(*patterns)` and `raw(pattern)`
+- Lookaround helpers: `lookahead(pattern)`, `negative_lookahead(pattern)`, `lookbehind(pattern)`, and `negative_lookbehind(pattern)`
+- New pre-built patterns: `phone_number()` and `hex_color()`
+- Test coverage for all newly added fluent API methods
 
 ## [0.1.0] - 2026-02-25
 

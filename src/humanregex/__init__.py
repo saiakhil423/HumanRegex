@@ -11,4 +11,4 @@ Write regex using plain English — no memorizing syntax required.
 from .core import Pattern
 
 __all__ = ["Pattern"]
-__version__ = "0.1.0"
+__version__ = "0.2.0"
